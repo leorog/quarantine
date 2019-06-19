@@ -2,10 +2,11 @@ defmodule Quarantine.Server do
   use GenServer
 
   def start_link(args \\ [], opts \\ [name: __MODULE__]) do
-    state = :quarantine
-    |> Application.get_all_env()
-    |> Keyword.merge(args)
-    |> Enum.into(%{})
+    state =
+      :quarantine
+      |> Application.get_all_env()
+      |> Keyword.merge(args)
+      |> Enum.into(%{})
 
     GenServer.start_link(__MODULE__, state, opts)
   end

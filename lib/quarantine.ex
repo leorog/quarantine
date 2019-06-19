@@ -14,7 +14,7 @@ defmodule Quarantine do
   false
 
   """
-  @type feature_name :: atom() | String.t
+  @type feature_name :: atom() | String.t()
 
   @spec enabled?(pid(), feature_name, String.t()) :: boolean()
   def enabled?(server \\ Server, feature, id) do
@@ -35,7 +35,7 @@ defmodule Quarantine do
   [{10, 0.7513847562371252}, {11, 0.9227740901808195}]
 
   """
-  @spec scores(atom(), list(integer() | String.t)) :: float()
+  @spec scores(atom(), list(integer() | String.t())) :: float()
   def scores(feature, ids) do
     Enum.map(ids, fn id ->
       {id, Quarantine.Core.score(feature, id)}

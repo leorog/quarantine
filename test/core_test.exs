@@ -3,7 +3,7 @@ defmodule Quarantine.CoreTest do
 
   alias Quarantine.Core
 
-  test "score is consistent given the same input"  do
+  test "score is consistent given the same input" do
     uuid = "34f64174-27e3-401a-9da5-b6ad238e0108"
     assert 0.8834973678187228 == Core.score(:feat1, uuid)
     refute 0.8834973678187228 == Core.score(:feat2, uuid)
