@@ -14,7 +14,7 @@ Add quarantine to your application deps
 ```elixir
 def deps do
   [
-    {:quarantine, "~> 0.1.0"}
+    {:quarantine, "~> 0.1.1"}
   ]
 end
 ```
@@ -57,9 +57,17 @@ Quarantine.scores(:some_percentage_flag, [1, 2, 3])
      {3, 0.30522621499961855}]
 ```
 
+## Testing
+
+Flags can be enabled for a specific test with `Quarantine.Server.start_link/1`.
+
+```elixir
+Quarantine.Server.start_link(feature1: [1], feature2: [3,4])
+```
+
 ## Refresh config without re-deploying your application
 
-To do that you should provide an implementation of [Quarantine.Driver](lib/quarantine/driver.ex) that fetch flags configuration from a desired source like ets, s3, redis, consul, zookeeper, database or filesystem and add it to the config
+To do that you should provide an implementation of [Quarantine.Driver](lib/quarantine/driver.ex) that fetch flags configuration from a external source
 
 Redis Driver example:
 ```elixir
@@ -85,15 +93,10 @@ defmodule S3Driver do
 end
 ```
 
-Note: get_flags must return a map which key is the flag and value is the config.
-
 Then add it to `:quarantine` configuration:
 
 ```elixir
 config :quarantine, 
    driver: RedisDriver,
-   pool_interval: 60_000 # in ms
+   poll_interval: 60_000 # in ms
 ```
-
-When Quarantine starts it will run the `driver` at `pool_interval` to fetch flags updates
-

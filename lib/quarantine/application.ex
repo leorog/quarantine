@@ -6,10 +6,11 @@ defmodule Quarantine.Application do
   def start(_type, _args) do
     children = [
       {Task.Supervisor, name: :driver_supervisor},
+      {Registry, keys: :unique, name: :server_registry},
       Quarantine.Server
     ]
 
-    opts = [strategy: :one_for_one, name: Quarantine.Supervisor]
+    opts = [strategy: :one_for_one, name: :quarantine_supervisor]
     Supervisor.start_link(children, opts)
   end
 end

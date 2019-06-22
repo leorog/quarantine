@@ -1,8 +1,6 @@
 defmodule Quarantine do
   @moduledoc File.read!("README.md")
 
-  alias Quarantine.Server
-
   @doc """
   Check if the given `feature` is enabled or disabled for the given `id`.
 
@@ -15,10 +13,11 @@ defmodule Quarantine do
 
   """
   @type feature_name :: atom() | String.t()
+  @type id :: integer() | String.t()
 
-  @spec enabled?(pid(), feature_name, String.t()) :: boolean()
-  def enabled?(server \\ Server, feature, id) do
-    GenServer.call(server, {:enabled?, feature, id})
+  @spec enabled?(feature_name, id) :: boolean()
+  def enabled?(feature, id) do
+    Quarantine.Server.enabled?(feature, id)
   end
 
   @doc """
@@ -35,7 +34,7 @@ defmodule Quarantine do
   [{10, 0.7513847562371252}, {11, 0.9227740901808195}]
 
   """
-  @spec scores(atom(), list(integer() | String.t())) :: float()
+  @spec scores(feature_name, id) :: float()
   def scores(feature, ids) do
     Enum.map(ids, fn id ->
       {id, Quarantine.Core.score(feature, id)}

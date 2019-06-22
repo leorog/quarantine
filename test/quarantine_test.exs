@@ -2,12 +2,16 @@ defmodule QuarantineTest do
   use ExUnit.Case
   doctest Quarantine
 
-  alias Quarantine.Server
-
   test "it can check flags" do
-    {:ok, _} = GenServer.start_link(Server, %{f1: [1, 2, 3]}, name: :test)
-    assert Quarantine.enabled?(:test, :f1, 1)
-    refute Quarantine.enabled?(:test, :f1, 4)
-    refute Quarantine.enabled?(:test, :f3, 1)
+    Quarantine.Server.start_link([some: [1, 2]])
+    assert Quarantine.enabled?(:some, 1)
+    refute Quarantine.enabled?(:some, 4)
+    assert Quarantine.enabled?(:some, 2)
+  end
+
+  test "it can compute scores" do
+    assert Quarantine.scores(:some, [1,2,3]) == [{1, 0.06948958571755551},
+                                                 {2, 0.7655298695353627},
+                                                 {3, 0.6601052872510872}]
   end
 end
