@@ -1,4 +1,6 @@
 # Quarantine
+[![Build Status](https://travis-ci.org/leorog/quarantine.svg?branch=master)](https://travis-ci.org/leorog/quarantine)
+[![Quarantine Version](https://img.shields.io/hexpm/v/quarantine.svg)](https://hex.pm/packages/quarantine)
 
 Quarantine is a tiny OTP application for feature toggles.
 
