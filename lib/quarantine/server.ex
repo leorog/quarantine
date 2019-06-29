@@ -33,18 +33,17 @@ defmodule Quarantine.Server do
 
     if poll_interval && driver do
       Process.send_after(self(), :fetch, poll_interval)
-      Task.Supervisor.async_nolink(:driver_supervisor, driver, :get_flags, [])
+      send(self(), :update)
     end
 
     {:noreply, state}
   end
 
-  def handle_info({_ref, new_flags}, state) do
+  def handle_info(:update, state) do
+    new_flags = apply(state[:driver], :get_flags, [])
     {:noreply, Map.merge(state, new_flags)}
-  end
-
-  def handle_info({:DOWN, _ref, :process, _pid, _reason}, state) do
-    {:noreply, state}
+  rescue
+    _ -> {:noreply, state}
   end
 
   def enabled?(feature, id) do

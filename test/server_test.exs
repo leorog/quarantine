@@ -16,22 +16,18 @@ defmodule Quarantine.ServerTest do
     assert_receive :fetch
   end
 
-  test "it handle driver task results message" do
-    assert {:noreply, %{a: 0.5}} = Server.handle_info({nil, %{a: 0.5}}, %{})
-  end
+  test "it handle update message" do
+    assert {:noreply, %{a: 0.5}} = Server.handle_info(:update, %{driver: DummyDriver})
 
-  test "it handle driver task DOWN message" do
-    state = %{}
-    assert {:noreply, ^state} = Server.handle_info({:DOWN, nil, :process, nil, nil}, state)
+    assert {:noreply, %{}} = Server.handle_info(:update, %{driver: nil})
   end
 
   test "if poll_interval and driver are present it starts the driver task and another :fetch" do
     state = %{poll_interval: 10, driver: DummyDriver}
     assert {:noreply, ^state} = Server.handle_info(:fetch, state)
 
-    assert_receive {_ref, %{a: 0.5}}
-    assert_receive {:DOWN, _ref, :process, _pid, :normal}
     assert_receive :fetch
+    assert_receive :update
   end
 
   test "it does not start driver task and another :fetch if poll_interval and driver are not present" do
