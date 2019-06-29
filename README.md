@@ -16,7 +16,7 @@ Add quarantine to your application deps
 ```elixir
 def deps do
   [
-    {:quarantine, "~> 0.1.1"}
+    {:quarantine, "~> 0.1.2"}
   ]
 end
 ```
